@@ -1,0 +1,164 @@
+# Default values for aviralworld.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  pullPolicy: Always
+
+# The configuration for accessing the S3 service
+s3:
+  # The name of the bucket to store recordings in
+  bucketName: "avw-recordings"
+
+  # The name of the region (not important)
+  regionName: "do-sfo2"
+
+  # The endpoint to connect to
+  endpoint: "https://sfo2.digitaloceanspaces.com"
+
+  # The name of the secret with the authentication details (must
+  # provide ACCESS_KEY and SECRET_ACCESS_KEY)
+  secretRef: "avw-s3"
+
+# The configuration for accessing the PostgreSQL database
+postgres:
+  # The name of the secret with the authentication details (must
+  # provide CONNECTION_STRING)
+  secretRef: "avw-postgres"
+
+# The configuration for the backend
+backend:
+  # Whether to enable the backend
+  enabled: true
+
+  image:
+    repository: "registry.gitlab.com/aviralworld/backend"
+    tag: "NONEXISTENT"
+
+  # The port for the application to listen on
+  port: 3030
+
+  service:
+    # Whether to create the service
+    create: true
+
+    # The type of service to create
+    type: "ClusterIP"           # TODO should this be something else?
+
+    # The port to listen on
+    port: 3030
+
+  #  The base URL for the deployment
+  baseUrl: "https://www.example.com/"
+
+  # The path to use in URLs to the API
+  apiPath: "recordings"
+
+  # The number of tokens to generate for each new recording
+  tokensPerRecording: 2
+
+  # Configuration details for stored recordings
+  store:
+    # The ACL to set on recordings
+    acl: "public-read"
+
+    # The cache control policy to set on recordings
+    cacheControl: "public, max-age=604800, immutable"
+
+    # The base URL for stored recordings
+    baseUrl: "http://www.example.com/recordings/"
+
+# The configuration for the frontend
+frontend:
+  # Whether to enable the frontend
+  enabled: true
+
+  image:
+    repository: "registry.gitlab.com/aviralworld/frontend"
+    tag: "nonexistent"
+
+  # The port the application should listen on
+  port: 9384
+
+  service:
+    # Whether to create the service
+    create: true
+
+    # The type of service to create
+    type: "ClusterIP"
+
+    # The port to listen on
+    port: 9384
+
+  # The `NODE_ENV` value
+  environment: "production"
+
+  # The maximum body size in bytes
+  maxBodySize: "1gb"
+
+imagePullSecrets:
+  - name: "avw-regcred"
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths: []
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
