@@ -1,5 +1,16 @@
 {{- if .Values.ingress.enabled -}}
 apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ include "aviralworld.fullname" . }}-https-only
+  labels:
+    {{- include "aviralworld.labels" . | nindent 4 }}
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
+---
+apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: {{ include "aviralworld.fullname" . }}
@@ -20,4 +31,20 @@ spec:
           port: {{ .Values.frontend.service.port }}
   tls:
     secretName: "{{ .Values.ingress.tls.secretRef }}"
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "aviralworld.fullname" . }}-http
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: PathPrefix(`/`)
+      middlewares:
+        - name: {{ include "aviralworld.fullname" . }}-https-only
+      kind: Rule
+      services:
+        - name: {{ include "aviralworld.fullname" . }}-frontend
+          port: {{ .Values.frontend.service.port }}
 {{- end }}
