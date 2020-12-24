@@ -59,6 +59,12 @@ spec:
               value: "http://{{ include "aviralworld.fullname" . }}-backend:{{ .Values.backend.port }}" # "
             - name: NODE_ENV
               value: "{{ .Values.frontend.environment }}"
+            - name: FRONTEND_RANDOM_STORY_COUNT
+              value: "{{ .Values.frontend.randomStoryCount }}"
+            {{- with .Values.frontend.enableAdminMode }}
+            - name: FRONTEND_ENABLE_ADMIN_MODE
+              value: "1"
+            {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

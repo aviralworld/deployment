@@ -95,8 +95,11 @@ frontend:
   # The `NODE_ENV` value
   environment: "production"
 
-  # The maximum body size in bytes
-  maxBodySize: "1gb"
+  # The number of random stories to show on the front page
+  randomStoryCount: 3
+
+  # Whether to enable admin mode
+  enableAdminMode: false
 
 imagePullSecrets:
   - name: "avw-regcred"
