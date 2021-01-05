@@ -40,6 +40,9 @@ backend:
   # The port for the application to listen on
   port: 3030
 
+  # The port the application should listen for admin routes on
+  adminPort: 3031
+
   service:
     # Whether to create the service
     create: true

@@ -41,15 +41,13 @@ spec:
             - name: http
               containerPort: {{ .Values.backend.port }}
               protocol: TCP
-          # TODO add health checks
-          #livenessProbe:
-          #  httpGet:
-          #    path: /
-          #    port: http
-          #readinessProbe:
-          #  httpGet:
-          #    path: /
-          #    port: http
+            - name: admin
+              containerPort: {{ .Values.backend.adminPort }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: admin
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
@@ -59,6 +57,8 @@ spec:
               value: "{{ .Values.backend.apiPath }}"
             - name: BACKEND_PORT
               value: "{{ .Values.backend.port }}"
+            - name: BACKEND_ADMIN_PORT
+              value: "{{ .Values.backend.adminPort }}"
             - name: BACKEND_TOKENS_PER_RECORDING
               value: "{{ .Values.backend.tokensPerRecording }}"
             - name: BACKEND_S3_ACL
