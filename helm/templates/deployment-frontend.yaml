@@ -65,6 +65,12 @@ spec:
             - name: FRONTEND_ENABLE_ADMIN_MODE
               value: "1"
             {{- end }}
+            - name: FRONTEND_DEBOUNCE_DELAY_MS
+              value: "{{ .Values.frontend.debounceDelayMs }}"
+            {{- with .Values.frontend.serveStatic }}
+            - name: FRONTEND_SERVE_STATIC
+              value: "1"
+            {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
