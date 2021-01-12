@@ -6,10 +6,10 @@ metadata:
 {{ include "aviralworld.labels" . | indent 4 }}
     app: frontend
 spec:
-  type: {{ .Values.frontend.service.type }}
+  type: "{{ .Values.frontend.service.type }}"
   ports:
     - port: {{ .Values.frontend.service.port }}
-      targetPort: http
+      targetPort: nginx
       protocol: TCP
       name: http
   selector:

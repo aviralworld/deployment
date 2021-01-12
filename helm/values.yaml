@@ -40,6 +40,9 @@ backend:
   # The port for the application to listen on
   port: 3030
 
+  # The port the application should listen for admin routes on
+  adminPort: 3031
+
   service:
     # Whether to create the service
     create: true
@@ -95,8 +98,14 @@ frontend:
   # The `NODE_ENV` value
   environment: "production"
 
-  # The maximum body size in bytes
-  maxBodySize: "1gb"
+  # The number of random stories to show on the front page
+  randomStoryCount: 3
+
+  # Whether to enable admin mode
+  enableAdminMode: false
+
+  # The delay in milliseconds to use as the debounce timer
+  debounceDelayMs: 300
 
 imagePullSecrets:
   - name: "avw-regcred"
