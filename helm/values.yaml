@@ -107,9 +107,6 @@ frontend:
   # The delay in milliseconds to use as the debounce timer
   debounceDelayMs: 300
 
-  # Whether to serve static files as well
-  serveStatic: true
-
 imagePullSecrets:
   - name: "avw-regcred"
 nameOverride: ""

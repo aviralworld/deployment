@@ -38,7 +38,7 @@ spec:
           image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
+            - name: app
               containerPort: {{ .Values.frontend.port }}
               protocol: TCP
           # TODO add health checks
@@ -61,16 +61,32 @@ spec:
               value: "{{ .Values.frontend.environment }}"
             - name: FRONTEND_RANDOM_STORY_COUNT
               value: "{{ .Values.frontend.randomStoryCount }}"
-            {{- with .Values.frontend.enableAdminMode }}
             - name: FRONTEND_ENABLE_ADMIN_MODE
-              value: "1"
-            {{- end }}
+              value: {{ if .Values.frontend.enableAdminMode }}"1"{{ else }}"0"{{ end }}
             - name: FRONTEND_DEBOUNCE_DELAY_MS
               value: "{{ .Values.frontend.debounceDelayMs }}"
-            {{- with .Values.frontend.serveStatic }}
             - name: FRONTEND_SERVE_STATIC
-              value: "1"
-            {{- end }}
+              value: "0"
+            - name: FRONTEND_COMPRESSION
+              value: "0"
+        - name: {{ .Chart.Name }}-frontend-http
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.frontend.image.repository }}/http:{{ .Values.frontend.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: nginx
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /static/manifest.json
+              port: nginx
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: FRONTEND_APP_URL
+              value: "http://127.0.0.1:{{ .Values.frontend.port }}"
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
