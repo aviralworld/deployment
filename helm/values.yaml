@@ -85,6 +85,9 @@ frontend:
   # The port the application should listen on
   port: 9384
 
+  # The port the application should listen for admin routes on
+  adminPort: 9385
+
   service:
     # Whether to create the service
     create: true
@@ -106,6 +109,9 @@ frontend:
 
   # The delay in milliseconds to use as the debounce timer
   debounceDelayMs: 300
+
+  # The timeout in milliseconds for checking the upstream API
+  healthCheckTimeoutMs: 50
 
 imagePullSecrets:
   - name: "avw-regcred"
