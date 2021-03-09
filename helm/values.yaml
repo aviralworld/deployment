@@ -101,6 +101,9 @@ frontend:
   # The `NODE_ENV` value
   environment: "production"
 
+  # The base URL to use where required, with a trailing slash
+  baseUrl: "https://example.com/"
+
   # The number of random stories to show on the front page
   randomStoryCount: 3
 
