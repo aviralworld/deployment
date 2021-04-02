@@ -41,20 +41,26 @@ spec:
             - name: app
               containerPort: {{ .Values.frontend.port }}
               protocol: TCP
-          # TODO add health checks
-          #livenessProbe:
-          #  httpGet:
-          #    path: /
-          #    port: http
-          #readinessProbe:
-          #  httpGet:
-          #    path: /
-          #    port: http
+            - name: admin
+              containerPort: {{ .Values.frontend.adminPort }}
+              protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: admin
+            failureThreshold: 12
+            periodSeconds: 2
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: admin
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
             - name: PORT
               value: "{{ .Values.frontend.port }}"
+            - name: FRONTEND_BASE_URL
+              value: "{{ .Values.frontend.baseUrl }}"
             - name: FRONTEND_API_URL
               value: "http://{{ include "aviralworld.fullname" . }}-backend:{{ .Values.backend.port }}" # "
             - name: NODE_ENV
@@ -69,6 +75,10 @@ spec:
               value: "0"
             - name: FRONTEND_COMPRESSION
               value: "0"
+            - name: FRONTEND_ADMIN_PORT
+              value: "{{ .Values.frontend.adminPort }}"
+            - name: FRONTEND_HEALTH_CHECK_TIMEOUT_MS
+              value: "{{ .Values.frontend.healthCheckTimeoutMs }}"
         - name: {{ .Chart.Name }}-frontend-http
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
