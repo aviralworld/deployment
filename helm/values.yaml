@@ -28,6 +28,10 @@ postgres:
   # provide CONNECTION_STRING)
   secretRef: "avw-postgres"
 
+  # (Optional) The name of the ConfigMap containing the server
+  # certificate under the name postgres.crt
+  certificateRef: "avw-postgres-certificate"
+
 # The configuration for the backend
 backend:
   # Whether to enable the backend
