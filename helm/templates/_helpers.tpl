@@ -60,3 +60,21 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Common New Relic configuration
+*/}}
+{{- define "aviralworld.newrelic" -}}
+- name: NEW_RELIC_NO_CONFIG_FILE
+  value: "1"
+- name: NEW_RELIC_APP_NAME
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.newRelic.secretRef }}
+      key: APP_NAME
+- name: NEW_RELIC_LICENSE_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.newRelic.secretRef }}
+      key: LICENSE_KEY
+{{- end }}

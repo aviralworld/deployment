@@ -32,6 +32,9 @@ postgres:
   # certificate under the name postgres.crt
   certificateRef: "avw-postgres-certificate"
 
+newRelic:
+  secretRef: "avw-newrelic"
+
 # The configuration for the backend
 backend:
   # Whether to enable the backend
