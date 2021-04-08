@@ -79,6 +79,8 @@ spec:
               value: "{{ .Values.frontend.adminPort }}"
             - name: FRONTEND_HEALTH_CHECK_TIMEOUT_MS
               value: "{{ .Values.frontend.healthCheckTimeoutMs }}"
+            - name: ROARR_LOG
+              value: "true"
         - name: {{ .Chart.Name }}-frontend-http
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
