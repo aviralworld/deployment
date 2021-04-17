@@ -77,4 +77,8 @@ Common New Relic configuration
     secretKeyRef:
       name: {{ .Values.newRelic.secretRef }}
       key: LICENSE_KEY
+{{- if not .Values.newRelic.enabled }}
+- name: NEW_RELIC_AGENT_ENABLED
+  value: "false"
+{{- end -}}
 {{- end }}
