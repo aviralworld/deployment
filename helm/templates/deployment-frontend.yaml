@@ -79,6 +79,9 @@ spec:
               value: "{{ .Values.frontend.adminPort }}"
             - name: FRONTEND_HEALTH_CHECK_TIMEOUT_MS
               value: "{{ .Values.frontend.healthCheckTimeoutMs }}"
+            - name: ROARR_LOG
+              value: "true"
+            {{ include "aviralworld.newrelic" . | nindent 12 }}
         - name: {{ .Chart.Name }}-frontend-http
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
@@ -90,7 +93,7 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /static/manifest.json
+              path: /static/logo.svg
               port: nginx
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
