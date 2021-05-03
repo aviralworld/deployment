@@ -11,6 +11,20 @@ spec:
     permanent: true
 ---
 apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ include "aviralworld.fullname" . }}-rate-limit
+  labels:
+    {{- include "aviralworld.labels" . | nindent 4 }}
+spec:
+  rateLimit:
+    {{- with .Values.ingress.rateLimiting }}
+    average: {{ .average }}
+    burst: {{ .burst }}
+    period: {{ .period }}
+    {{- end }}
+---
+apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: {{ include "aviralworld.fullname" . }}
@@ -25,6 +39,8 @@ spec:
     - websecure
   routes:
     - match: PathPrefix(`/`)
+      middlewares:
+        - name: {{ include "aviralworld.fullname" . }}-rate-limit
       kind: Rule
       services:
         - name: {{ include "aviralworld.fullname" . }}-frontend
