@@ -1,7 +1,7 @@
 # Install Traefik
 
 ```
-helm repo add traefik https://containous.github.io/traefik-helm-chart && helm repo update
+helm repo add traefik https://helm.traefik.io/traefik && helm repo update
 kubectl create namespace traefik
 helm install --atomic -n traefik traefik traefik/traefik -f traefik-values.yaml
 ```
@@ -17,7 +17,7 @@ kubectl -n traefik get svc
 ```
 helm repo add jetstack https://charts.jetstack.io && helm repo update
 kubectl create namespace cert-manager
-helm install --atomic cert-manager jetstack/cert-manager -n cert-manager --version v1.1.0 --set installCRDs=true
+helm install --atomic cert-manager jetstack/cert-manager -n cert-manager --version v1.3.1 --set installCRDs=true
 ```
 
 Once the DNS has been updated as above and is resolvable, create the `ClusterIssuer` and `Certificate`:
