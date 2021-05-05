@@ -32,7 +32,7 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}-frontend
+        - name: node
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
@@ -79,10 +79,14 @@ spec:
               value: "{{ .Values.frontend.adminPort }}"
             - name: FRONTEND_HEALTH_CHECK_TIMEOUT_MS
               value: "{{ .Values.frontend.healthCheckTimeoutMs }}"
+            - name: FRONTEND_MAX_RECORDING_LENGTH_SECONDS
+              value: "{{ .Values.frontend.maxRecordingLength }}"
+            - name: FRONTEND_MIN_RECORDING_LENGTH_SECONDS
+              value: "{{ .Values.frontend.minRecordingLength }}"
             - name: ROARR_LOG
               value: "true"
             {{ include "aviralworld.newrelic" . | nindent 12 }}
-        - name: {{ .Chart.Name }}-frontend-http
+        - name: http
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.frontend.image.repository }}/http:{{ .Values.frontend.image.tag }}"

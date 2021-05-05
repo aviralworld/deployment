@@ -1,10 +1,15 @@
-ingressRoute:
-  dashboard:
-    enabled: true
+image:
+  tag: "v2.4.8"
+
+ports:
+  websecure:
+    tls:
+      enabled: true
+
+globalArguments:
+  - "--global.checknewversion"
 
 additionalArguments:
-  - "--log.level=ERROR"
-  - "--entrypoints.websecure.http.tls"
   - "--providers.kubernetesIngress.ingressClass=traefik-cert-manager"
   - "--ping"
   - "--metrics.prometheus"
