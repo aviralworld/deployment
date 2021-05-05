@@ -32,7 +32,7 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}-frontend
+        - name: node
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
@@ -86,7 +86,7 @@ spec:
             - name: ROARR_LOG
               value: "true"
             {{ include "aviralworld.newrelic" . | nindent 12 }}
-        - name: {{ .Chart.Name }}-frontend-http
+        - name: http
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.frontend.image.repository }}/http:{{ .Values.frontend.image.tag }}"
