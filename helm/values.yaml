@@ -125,6 +125,12 @@ frontend:
   # The timeout in milliseconds for checking the upstream API
   healthCheckTimeoutMs: 50
 
+  # The minimum length of a recording, in seconds
+  minRecordingLength: 60
+
+  # The maximum length of a recording, in seconds
+  maxRecordingLength: 300
+
 imagePullSecrets:
   - name: "avw-regcred"
 nameOverride: ""

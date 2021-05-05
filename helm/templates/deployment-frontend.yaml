@@ -79,6 +79,10 @@ spec:
               value: "{{ .Values.frontend.adminPort }}"
             - name: FRONTEND_HEALTH_CHECK_TIMEOUT_MS
               value: "{{ .Values.frontend.healthCheckTimeoutMs }}"
+            - name: FRONTEND_MAX_RECORDING_LENGTH_SECONDS
+              value: "{{ .Values.frontend.maxRecordingLength }}"
+            - name: FRONTEND_MIN_RECORDING_LENGTH_SECONDS
+              value: "{{ .Values.frontend.minRecordingLength }}"
             - name: ROARR_LOG
               value: "true"
             {{ include "aviralworld.newrelic" . | nindent 12 }}
