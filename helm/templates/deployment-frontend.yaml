@@ -88,6 +88,8 @@ spec:
         - name: http
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
+            runAsUser: ~        # nginx image UID
+            runAsNonRoot: false # required by nginx
           image: "{{ .Values.frontend.image.repository }}/http:{{ .Values.frontend.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
