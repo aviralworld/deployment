@@ -88,12 +88,17 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.s3.secretRef }}
                   key: SECRET_ACCESS_KEY
-          {{- with .Values.postgres.certificateRef }}
           volumeMounts:
+            - name: tmp
+              mountPath: /usr/app/tmp
+            {{- with .Values.postgres.certificateRef }}
             - name: postgres-certificate
               mountPath: /etc/ssl/certs/postgres.crt
               subPath: postgres.crt
-          {{- end }}
+            {{- end }}
+      volumes:
+        - name: tmp
+          emptyDir: {}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
