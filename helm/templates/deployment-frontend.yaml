@@ -85,7 +85,6 @@ spec:
               value: "{{ .Values.frontend.minRecordingLength }}"
             - name: ROARR_LOG
               value: "true"
-            {{ include "aviralworld.newrelic" . | nindent 12 }}
         - name: http
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
