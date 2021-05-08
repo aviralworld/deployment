@@ -30,7 +30,7 @@ postgres:
 
   # (Optional) The name of the ConfigMap containing the server
   # certificate under the name postgres.crt
-  certificateRef: "avw-postgres-certificate"
+  certificateRef: ""
 
 newRelic:
   secretRef: "avw-newrelic"
@@ -89,7 +89,7 @@ frontend:
 
   image:
     repository: "registry.gitlab.com/aviralworld/frontend"
-    tag: "nonexistent"
+    tag: "NONEXISTENT"
 
   # The port the application should listen on
   port: 9384
@@ -150,13 +150,13 @@ podAnnotations: {}
 podSecurityContext: {}
   # fsGroup: 2000
 
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+securityContext:
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
 
 ingress:
   enabled: true

@@ -85,10 +85,11 @@ spec:
               value: "{{ .Values.frontend.minRecordingLength }}"
             - name: ROARR_LOG
               value: "true"
-            {{ include "aviralworld.newrelic" . | nindent 12 }}
         - name: http
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
+            runAsUser: ~        # nginx image UID
+            runAsNonRoot: false # required by nginx
           image: "{{ .Values.frontend.image.repository }}/http:{{ .Values.frontend.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
@@ -104,6 +105,24 @@ spec:
           env:
             - name: FRONTEND_APP_URL
               value: "http://127.0.0.1:{{ .Values.frontend.port }}"
+          volumeMounts:
+            - name: conf
+              mountPath: /etc/nginx/conf.d
+            - name: tmp
+              mountPath: /tmp
+            - name: cache
+              mountPath: /var/cache/nginx
+            - name: run
+              mountPath: /var/run
+      volumes:
+        - name: conf
+          emptyDir: {}
+        - name: cache
+          emptyDir: {}
+        - name: tmp
+          emptyDir: {}
+        - name: run
+          emptyDir: {}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
