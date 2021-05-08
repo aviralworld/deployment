@@ -30,7 +30,7 @@ postgres:
 
   # (Optional) The name of the ConfigMap containing the server
   # certificate under the name postgres.crt
-  certificateRef: "avw-postgres-certificate"
+  certificateRef: ""
 
 newRelic:
   secretRef: "avw-newrelic"
