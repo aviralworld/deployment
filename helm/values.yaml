@@ -165,6 +165,7 @@ ingress:
     average: 10
     burst: 30
     period: 1s
+  host: ""
   tls:
     secretRef: "avw-cert"
 
