@@ -11,5 +11,6 @@ globalArguments:
 
 additionalArguments:
   - "--providers.kubernetesIngress.ingressClass=traefik-cert-manager"
+  - "--providers.kubernetescrd.allowCrossNamespace=false"
   - "--ping"
   - "--metrics.prometheus"
