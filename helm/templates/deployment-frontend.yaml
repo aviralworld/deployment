@@ -86,10 +86,7 @@ spec:
             - name: ROARR_LOG
               value: "true"
         - name: http
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-            runAsUser: ~        # nginx image UID
-            runAsNonRoot: false # required by nginx
+          # nginx needs to run as the root user, so don’t apply the same security context
           image: "{{ .Values.frontend.image.repository }}/http:{{ .Values.frontend.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
