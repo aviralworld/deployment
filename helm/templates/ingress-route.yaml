@@ -25,6 +25,22 @@ spec:
     {{- end }}
 ---
 apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ include "aviralworld.fullname" . }}-strip-api-prefix
+spec:
+  stripPrefix:
+    prefixes:
+      - /api
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ include "aviralworld.fullname" . }}-compress
+spec:
+  compress: {}
+---
+apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: {{ include "aviralworld.fullname" . }}
@@ -38,7 +54,16 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: PathPrefix(`/`)
+    - match: "Host(`{{ required "A valid ingress host is required!" .Values.ingress.host }}`) && PathPrefix(`/api`)"
+      middlewares:
+        - name: {{ include "aviralworld.fullname" . }}-rate-limit
+        - name: {{ include "aviralworld.fullname" . }}-strip-api-prefix
+        - name: {{ include "aviralworld.fullname" . }}-compress
+      kind: Rule
+      services:
+        - name: {{ include "aviralworld.fullname" . }}-backend
+          port: {{ .Values.backend.service.port }}
+    - match: "Host(`{{ required "A valid ingress host is required!" .Values.ingress.host }}`) && PathPrefix(`/`)"
       middlewares:
         - name: {{ include "aviralworld.fullname" . }}-rate-limit
       kind: Rule
@@ -56,7 +81,7 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: PathPrefix(`/`)
+    - match: "Host(`{{ required "A valid ingress host is required!" .Values.ingress.host }}`) && PathPrefix(`/`)"
       middlewares:
         - name: {{ include "aviralworld.fullname" . }}-https-only
       kind: Rule
